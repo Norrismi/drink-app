@@ -3,6 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "engines": {
+    "yarn": "1.10.1",
+    "node": "10.0.0"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "server": "nodemon index.js",
+    "client": "yarn --cwd client start",
+    "dev": "concurrently 'yarn server'  'yarn client' "
+  },
   "dependencies": {
     "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",

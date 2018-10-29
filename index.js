@@ -15,6 +15,7 @@ app.use(bodyParser.json())
 app.use(cookieParser())
 
 require('./routes/userRoutes')(app)
+require('./routes/drinkRoutes')(app)
 
 
 

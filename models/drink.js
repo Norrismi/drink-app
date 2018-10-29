@@ -11,7 +11,7 @@ const drinkSchema = mongoose.Schema(
       required: true
     },
     review: {
-      trype: String,
+      type: String,
       required: true
     },
     rating: {
