@@ -6,6 +6,10 @@ const drinkSchema = mongoose.Schema(
       type: String,
       required: true
     },
+    style: {
+      type: String,
+      required: false
+    },
     locationMade: {
       type: String,
       required: true
