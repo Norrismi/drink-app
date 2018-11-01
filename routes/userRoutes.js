@@ -1,4 +1,6 @@
 const { User } = require("../models/user");
+const {Drink} = require('../models/drink')
+const {auth} = require('../middleware/auth')
 
 module.exports = app => {
   app.post("/api/register", (req, res) => {
@@ -13,7 +15,6 @@ module.exports = app => {
     });
   });
 
-  //test
   app.post("/api/login", (req, res) => {
     User.findOne({ email: req.body.email }, (err, user) => {
       if (!user)
@@ -23,7 +24,7 @@ module.exports = app => {
         });
 
       user.comparePassword(req.body.password, (err, isMatch) => {
-        if (!Match)
+        if (!isMatch)
           return res.json({
             isAuth: false,
             message: "Wrong password"
@@ -47,23 +48,36 @@ module.exports = app => {
     });
   });
 
-  ///test
-  app.get("/api/logout", (req, res) => {
-    req.user.deleteToken(req.token, (err, user) => {
+  app.get("/api/getReviewer", (req, res) => {
+    let id = req.query.id;
+
+    User.findById(id, (err, doc) => {
+      if (err) return res.status(400).send(err);
+      res.send({
+        name: doc.firstname,
+        lastname: doc.lastname
+      });
+    });
+  });
+
+
+
+  app.get("/api/logout", auth, (req, res) => {
+   req.user.deleteToken(req.token, (err, user) => {
       if (err) return res.status(400).send(err);
       res.sendStatus(200);
     });
   });
 
-//   app.get("/api/auth", auth, (req, res) => {
-//     res.json({
-//       isAuth: true,
-//       id: req.user._id,
-//       email: req.user.email,
-//       name: req.user.name,
-//       lastname: req.user.lastname
-//     });
-//   });
+    app.get("/api/auth", auth, (req, res) => {
+      res.json({
+        isAuth: true,
+        id: req.user._id,
+        email: req.user.email,
+        name: req.user.name,
+        lastname: req.user.lastname
+      });
+    });
 
   app.post("/api/updateUser", (req, res) => {
     User.findByIdAndUpdate(
@@ -88,7 +102,4 @@ module.exports = app => {
       res.json({ success: true, user: doc });
     });
   });
-
-
-
 };

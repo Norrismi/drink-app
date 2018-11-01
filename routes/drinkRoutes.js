@@ -25,6 +25,13 @@ module.exports = app => {
       });
   });
 
+  app.get("/api/user_posts", (req, res) => {
+    Drink.find({ ownerId: req.query.user }).exec((err, docs) => {
+      if (err) return res.status(400).send(err);
+      res.send(docs);
+    });
+  });
+
   app.post("/api/drink", (req, res) => {
     const drink = new Drink(req.body);
 
@@ -37,11 +44,9 @@ module.exports = app => {
     });
   });
 
-
-  //Need to test
   app.get("/api/getReviwer", (req, res) => {
     let id = req.query.id;
-  
+
     User.findById(id, (err, doc) => {
       if (err) return res.status(400).send(err);
       res.send({
@@ -50,30 +55,28 @@ module.exports = app => {
       });
     });
   });
-  
+
   app.post("/api/drink_update", (req, res) => {
-    Drink.findByIdAndUpdate(req.body._id, req.body, { new: true }, (err, doc) => {
-      if (err) return res.status(400).send(err);
-      res.json({
-        success: true,
-        doc
-      });
-    });
+    Drink.findByIdAndUpdate(
+      req.body._id,
+      req.body,
+      { new: true },
+      (err, doc) => {
+        if (err) return res.status(400).send(err);
+        res.json({
+          success: true,
+          doc
+        });
+      }
+    );
   });
-  
+
   app.delete("/api/delete_drink", (req, res) => {
     let id = req.query.id;
-  
+
     Drink.findByIdAndRemove(id, (err, doc) => {
       if (err) return res.status(400).send(err);
       res.json(true);
     });
   });
-
-
-
-
-
-
 };
-
