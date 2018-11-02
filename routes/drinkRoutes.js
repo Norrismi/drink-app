@@ -1,14 +1,7 @@
 const { Drink } = require("../models/drink");
 
 module.exports = app => {
-  app.get("/api/getDrink", (req, res) => {
-    let id = req.query.id;
-
-    Drink.findById(id, (err, doc) => {
-      if (err) return res.status(400).send(err);
-      res.send(doc);
-    });
-  });
+  // /api/drinks?limit=6&skip=0&order=asc
 
   app.get("/api/drinks", (req, res) => {
     let skip = parseInt(req.query.skip);
@@ -24,6 +17,17 @@ module.exports = app => {
         res.send(doc);
       });
   });
+
+
+  app.get("/api/getDrink", (req, res) => {
+    let id = req.query.id;
+
+    Drink.findById(id, (err, doc) => {
+      if (err) return res.status(400).send(err);
+      res.send(doc);
+    });
+  });
+
 
   app.get("/api/user_posts", (req, res) => {
     Drink.find({ ownerId: req.query.user }).exec((err, docs) => {
